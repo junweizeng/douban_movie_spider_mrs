@@ -4,7 +4,9 @@
 # @Author : zjw
 # @File : main.py
 # @Project : douban_movie_scrapy
+import random
 
+from fake_useragent import UserAgent
 from lxml import etree
 import requests
 import json
@@ -23,7 +25,29 @@ PUBLIC_PROXY = get_proxy()
 cursor = db.connection.cursor()
 
 
+def get_movie_urls(page_start):
+    """
+    获取每部电影详情的url地址
+    :param page_start: 起始号
+    :return: 电影url列表
+    """
+    movies_did_url = \
+        'https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=%E7%94%B5%E5%BD%B1&start=' + str(page_start)
+    response = get_response(movies_did_url)
+    json_text = json.loads(response.text)
+    subjects = json_text['data']
+    movie_urls = []
+    for subject in subjects:
+        movie_urls.append(subject['url'])
+    return movie_urls
+
+
 def get_movie_info(response):
+    """
+    爬取电影详情界面每个字段的具体信息
+    :param response: 电影详情页面响应
+    :return: 电影详情对象
+    """
     did = get_movie_id(response.url)
     print('did:' + did)
 
@@ -215,9 +239,10 @@ def get_movie_info(response):
 
 
 def get_response(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95"
-    }
+    time.sleep(random.random() * 3)
+
+    headers = {"User-Agent": UserAgent().random}
+    # 全局变量，公共代理
     global PUBLIC_PROXY
 
     while True:
@@ -229,12 +254,14 @@ def get_response(url):
         try:
             response = requests.get(url, proxies=proxies, headers=headers, timeout=10)
             response.encoding = 'utf-8'
+            # 如果响应编码为200，说明请求成功，代理可用，则退出循环
             if response.status_code == 200:
                 break
         except requests.exceptions.ConnectionError as e:
             print('Error', e.args)
         except Exception as e:
             print('Exception', e.args)
+        # 如果代理不可用，则重新获取一个代理
         PUBLIC_PROXY = get_proxy()
 
     return response
@@ -300,28 +327,22 @@ def save_info(info):
 
 
 def main():
-    page_start = 8247
+    page_start = -20
     while True:
         page_start += 20
         print('page_start', str(page_start))
-        movies_did_url = 'https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=%E7%94%B5%E5%BD%B1&start=' + str(page_start)
-        response = get_response(movies_did_url)
-        json_text = json.loads(response.text)
-        subjects = json_text['data']
-        movie_urls = []
-        for subject in subjects:
-            movie_urls.append(subject['url'])
+        # 获取电影详情的url列表
+        movie_urls = get_movie_urls(page_start)
         print(movie_urls)
         print()
 
         for url in movie_urls:
-            # response = get_html('https://movie.douban.com/subject/1295644/')
-            # response = get_html('https://movie.douban.com/subject/34966906/')
             response = get_response(url)
             print('请求码为：', end=str(response.status_code))
             print()
             if response.status_code == 200:
                 info = get_movie_info(response)
+                # did表示豆瓣id，即电影的subject号码
                 # 查询数据库中是否已经有did，如果不存在，则下载图片，并将数据存入数据库中
                 isDidExists = get_did_from_db(info['did'])
                 if isDidExists is None:

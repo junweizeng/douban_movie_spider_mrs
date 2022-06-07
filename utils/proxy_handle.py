@@ -22,9 +22,9 @@ def get_five_proxy():
 def get_proxy():
     import time
     time.sleep(1)
-    url = 'http://http.9vps.com/getip.asp?username=401022254&pwd=d52c3b42879274361afe984dc0c8f142&geshi=1&fenge=1&fengefu=&getnum=1'
+    url = 'http://route.xiongmaodaili.com/xiongmao-web/api/glip?secret=d2ce8d3cebe2347040eb7990a6c9e5bf&orderNo=GL20220501160300CfixYIcb&count=1&isTxt=1&proxyType=1'
     response = requests.get(url)
-    return response.text
+    return response.text.strip()
 
 
 if __name__ == '__main__':
