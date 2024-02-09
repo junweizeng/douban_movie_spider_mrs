@@ -1,13 +1,5 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# @Time : 2022/4/14 10:29
-# @Author : zjw
-# @File : upload_oss.py
-# @Project : douban_movie_scrapy
-
-
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
 # @Time : 2022/4/9 19:58
 # @Author : zjw
 # @File : aliyun_oss_test.py
