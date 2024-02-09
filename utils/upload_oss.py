@@ -29,8 +29,8 @@ def upload_picture(file_list, folder):
     endpoint = 'https://oss-cn-hangzhou.aliyuncs.com'
 
     # 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
-    access_key_id = 'LTAI5t61nKKQXDDum7KtX5tc'
-    access_key_secret = 'Ii91661FHdOh4UlwMehnZD47lvXrtY'
+    access_key_id = 'xxxxxx'
+    access_key_secret = 'xxxxxx'
     # 填写Bucket名称，例如examplebucket。
     bucket_name = 'mrs-zjw'
     # 指定图片所在Bucket的名称。如果图片不在Bucket根目录，需携带文件完整路径，例如exampledir/example.jpg。
