@@ -14,9 +14,9 @@ import os
 import pymysql
 
 # 映射对象
-MYSQL_HOST = os.environ.get("MYSQL_HOST", "rm-bp11602preg16q6g4jo.mysql.rds.aliyuncs.com")
-MYSQL_USER = os.environ.get("MYSQL_USER", "zjw")
-MYSQL_PASS = os.environ.get("MYSQL_PASS", "Zjw2933!")
+MYSQL_HOST = os.environ.get("MYSQL_HOST", "rm-xxxxxxxxxxxxx.mysql.rds.aliyuncs.com")
+MYSQL_USER = os.environ.get("MYSQL_USER", "xxxxx")
+MYSQL_PASS = os.environ.get("MYSQL_PASS", "xxxxx")
 MYSQL_DB = os.environ.get("MYSQL_DB", "mrs")
 
 connection = pymysql.connect(
